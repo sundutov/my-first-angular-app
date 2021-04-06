@@ -1,0 +1,8 @@
+<div *ngIf="person">
+    <p><span>First name: </span><span>{{person.firstName}}</span></p>
+    <p><span>Last name: </span><span>{{person.lastName}}</span></p>
+    <p><span>Age: </span><span>{{person.age}}</span></p>
+    <p><span>Birthday: </span><span>{{person.birthday | date:"longDate"}}</span></p>
+    <p><span>Profession: </span><span>{{person.profession}}</span></p>
+    <button routerLink="/people/{{person.id}}/update">Edit</button>
+</div>

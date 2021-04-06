@@ -1,0 +1,8 @@
+<form [formGroup]="personFormGroup" (ngSubmit)="onSubmit()" novalidate>
+    <p><label>First name: <input formControlName="firstName" /></label></p>
+    <p><label>Last name: <input formControlName="lastName" /></label></p>
+    <p><label>Age: <input formControlName="age" /></label></p>
+    <p><label>Birthday: <input formControlName="birthday" /></label></p>
+    <p><label>Profession: <input formControlName="profession" /></label></p>
+    <button [disabled]="!personFormGroup.valid" type="submit">Submit</button>
+</form>
