@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 import { InMemoryDbService, RequestInfo } from 'angular-in-memory-web-api';
-import { Observable, of } from 'rxjs';
-import PersonPagedModel from 'src/app/core/models/people/people.paged.model';
 import Person from 'src/app/core/models/people/person';
 
 @Injectable({

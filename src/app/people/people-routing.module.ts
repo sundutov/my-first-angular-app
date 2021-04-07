@@ -1,11 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { PersonComponent } from './components';
+import { CreatePersonComponent, PersonComponent, UpdatePersonComponent } from './components';
 import { PeopleComponent } from './components/people/people.component';
 
 const ROUTES = [
   { path: 'people', component: PeopleComponent },
-  { path: 'people/:id', component: PersonComponent }
+  { path: 'people/add', component: CreatePersonComponent },
+  { path: 'people/:id', component: PersonComponent },
+  { path: 'people/:id/update', component: UpdatePersonComponent },
 ];
 
 @NgModule({

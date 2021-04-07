@@ -21,98 +21,63 @@ export class PeopleService {
   constructor(private httpClient: HttpClient, private logger: LoggerService, private validation: PeopleValidationService) { }
 
   // todo: remove later(only for development)
-  get(): Observable<Person[]> {
+  async get(): Promise<Person[]> {
     this.logger.debug(`[PeopleService.get]`);
     const url = `${environment.httpBaseEndpoint}/people`;
-    return this.httpClient.get<Person[]>(url).pipe(
-      tap(response => this.logger.info(`Received ${response.length} people`)),
-      catchError((error: any, caught: Observable<Person[]>) => {
-        this.logger.error(error);
-        return caught;
-      })
-    );
+    return this.httpClient.get<Person[]>(url).toPromise();
   }
 
-  getAll(offset: number, limit: number): Observable<PersonPagedModel> {
+  getAll(offset: number, limit: number): Promise<PersonPagedModel> {
     this.logger.debug(`[PeopleService.getAll] Offser=${offset}, limit=${limit}`);
     if (offset < 0) {
       this.logger.error('Offset can not be less then zero');
-      return {} as Observable<PersonPagedModel>;
+      return {} as Promise<PersonPagedModel>;
     }
     if (limit <= 0) {
       this.logger.error('Limit can not be less or equal to zero');
-      return {} as Observable<PersonPagedModel>;
+      return {} as Promise<PersonPagedModel>;
     }
     const url = `${environment.httpBaseEndpoint}/people/?offset=${offset}&limit=${limit}`;
-    return this.httpClient.get<PersonPagedModel>(url).pipe(
-      tap(response => this.logger.info(`Received ${response.people?.length ?? 0} people`)),
-      catchError((error: any, caught: Observable<PersonPagedModel>) => {
-        this.logger.error(error);
-        return caught;
-      })
-    );
+    return this.httpClient.get<PersonPagedModel>(url).toPromise();
   }
 
-  getById(id: number): Observable<Person> {
+  getById(id: number): Promise<Person> {
     this.logger.debug(`[PeopleService.getById] Id=${id}`);
     if (id < 0) {
       this.logger.error('Offset can not be less then zero');
-      return {} as Observable<Person>;
+      return {} as Promise<Person>;
     }
     const url = `${environment.httpBaseEndpoint}/people/${id}`;
-    return this.httpClient.get<Person>(url).pipe(
-      tap(result => this.logger.info(`Received ${JSON.stringify(result)} person`)),
-      catchError((error: any, caught: Observable<Person>) => {
-        this.logger.error(error);
-        return caught;
-      })
-    );
+    return this.httpClient.get<Person>(url).toPromise();
   }
 
-  create(model: PersonCreateModel): Observable<Person> {
+  create(model: PersonCreateModel): Promise<Person> {
     this.logger.debug(`[PeopleService.create] model=${{ ...model }}`);
     if (!this.validation.createModelIsValid(model)) {
       this.logger.error('Person create model is invalid');
-      return {} as Observable<Person>;
+      return {} as Promise<Person>;
     }
-    const url = `${environment.httpBaseEndpoint}/people/create`;
-    return this.httpClient.post<Person>(url, model).pipe(
-      tap(result => this.logger.info(`Received ${JSON.stringify(result)} created person`)),
-      catchError((error: any, caught: Observable<Person>) => {
-        this.logger.error(error);
-        return caught;
-      })
-    );
+    const url = `${environment.httpBaseEndpoint}/people`;
+    return this.httpClient.post<Person>(url, model).toPromise();
   }
 
-  update(id: number, model: PersonUpdateModel): Observable<Person> {
+  update(id: number, model: PersonUpdateModel): Promise<Person> {
     this.logger.debug(`[PeopleService.update] model=${{ ...model }}`);
     if (!this.validation.updateModelIsValid(model)) {
       this.logger.error('Person update model is invalid');
-      return {} as Observable<Person>;
+      return {} as Promise<Person>;
     }
     const url = `${environment.httpBaseEndpoint}/people/${id}/update`;
-    return this.httpClient.put<Person>(url, model).pipe(
-      tap(result => this.logger.info(`Received ${JSON.stringify(result)} updated person`)),
-      catchError((error: any, caught: Observable<Person>) => {
-        this.logger.error(error);
-        return caught;
-      })
-    );
+    return this.httpClient.put<Person>(url, model).toPromise();
   }
 
-  delete(id: number): Observable<{}> {
+  delete(id: number): Promise<{}> {
     this.logger.debug(`[PeopleService.delete] Id=${id}`);
     if (id < 0) {
       this.logger.error('Offset can not be less then zero');
-      return {} as Observable<{}>;
+      return {} as Promise<{}>;
     }
     const url = `${environment.httpBaseEndpoint}/people/${id}/delete`;
-    return this.httpClient.delete(url).pipe(
-      catchError((error: any, caught: Observable<{}>) => {
-        this.logger.error(error);
-        return caught;
-      })
-    );
+    return this.httpClient.delete(url).toPromise();
   }
 }

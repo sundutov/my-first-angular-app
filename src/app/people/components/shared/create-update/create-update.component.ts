@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import Person from 'src/app/core/models/people/person';
 import PersonCreateModel from 'src/app/core/models/people/person.create.model';
@@ -8,7 +8,7 @@ import PersonCreateModel from 'src/app/core/models/people/person.create.model';
   templateUrl: './create-update.component.html',
   styleUrls: ['./create-update.component.css']
 })
-export class CreateUpdateComponent implements OnInit {
+export class CreateUpdateComponent implements OnInit, OnChanges {
   personForm = {
     firstName: '',
     lastName: '',
@@ -24,10 +24,16 @@ export class CreateUpdateComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder) { }
 
-  ngOnInit(): void {
-    if (this.person) {
-      this.personForm = { ...this.person };
+  ngOnChanges(changes: SimpleChanges): void {
+    for (const propName in changes) {
+      if (propName && propName === 'person' && this.person) {
+        this.personForm = { ...this.person };
+        this.ngOnInit();
+      }
     }
+  }
+
+  ngOnInit(): void {
     this.personFormGroup = this.formBuilder.group({
       firstName: [
         this.personForm.firstName,

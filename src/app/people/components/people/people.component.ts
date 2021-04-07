@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PeopleService } from 'src/app/core';
+import { LoggerService, PeopleService } from 'src/app/core';
 import PersonPagedModel from 'src/app/core/models/people/people.paged.model';
 import Person from 'src/app/core/models/people/person';
 
@@ -13,9 +13,13 @@ export class PeopleComponent implements OnInit {
   limit = 10;
   people?: Person[];
 
-  constructor(private personsService: PeopleService) { }
+  constructor(private personsService: PeopleService, private logger: LoggerService) { }
 
-  ngOnInit(): void {
-    this.personsService.get().subscribe({ next: p => this.people = p });
+  async ngOnInit(): Promise<void> {
+    try {
+      this.people = await this.personsService.get();
+    } catch (error) {
+      this.logger.error(error);
+    }
   }
 }

@@ -1,8 +1,9 @@
 <h3>Persons:</h3>
-<button routerLink="/add">Add new person</button>
+<button routerLink="/people/add">Add new person</button>
 <div *ngIf="people">
     <div *ngFor="let person of people">
         <br />
+        {{person.id}}
         <p><span>First name: </span><span>{{person.firstName}}</span></p>
         <p><span>Last name: </span><span>{{person.lastName}}</span></p>
         <button routerLink="/people/{{person.id}}">Details</button>

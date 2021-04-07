@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { PeopleService } from 'src/app/core';
+import { LoggerService, PeopleService } from 'src/app/core';
 import Person from 'src/app/core/models/people/person';
 import PersonCreateModel from 'src/app/core/models/people/person.create.model';
-import PersonUpdateModel from 'src/app/core/models/people/person.update.model';
 
 @Component({
   selector: 'app-update-person',
@@ -13,12 +12,17 @@ import PersonUpdateModel from 'src/app/core/models/people/person.update.model';
 })
 export class UpdatePersonComponent implements OnInit {
   person?: Person;
-  constructor(private route: ActivatedRoute, private personsService: PeopleService, private router: Router) { }
+  constructor(private route: ActivatedRoute, private personsService: PeopleService, private router: Router,
+              private logger: LoggerService) { }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     const routeParams = this.route.snapshot.paramMap;
-    const personId = Number(routeParams.get('personId'));
-    this.personsService.getById(personId).subscribe({ next: p => this.person = p });
+    const personId = Number(routeParams.get('id'));
+    try {
+      this.person = await this.personsService.getById(personId);
+    } catch (error) {
+      this.logger.error(`Can't get person with id=${personId} for update. ${error}`);
+    }
   }
 
   onSubmit = (model: PersonCreateModel): void => {
